@@ -1,5 +1,6 @@
 import { Agent } from "../agents/Agent";
 import { Task } from "../tasks/Task";
+import { Logger } from "../utils/Logger";
 
 /**
  * Orchestrates multiple agents and tasks
@@ -27,27 +28,25 @@ export class Bat {
   }
 
   /**
-   * Executes all tasks and returns their results
+   * Executes all tasks in parallel and returns their results
    * @returns Promise with an array of task results
    */
   public async kickoff(): Promise<string[]> {
-    const results: string[] = [];
-
-    for (const task of this.tasks) {
+    const logger = Logger.getInstance();
+    const taskPromises = this.tasks.map(async (task) => {
+      logger.logTaskExecution(task.description, "started");
       try {
         const result = await task.run();
-        results.push(result);
+        logger.logTaskExecution(task.description, "completed", result);
+        return result;
       } catch (error) {
-        if (error instanceof Error) {
-          console.error(`Task failed: ${error.message}`);
-          results.push(`Task failed: ${error.message}`);
-        } else {
-          console.error("Task failed: Unknown error");
-          results.push("Task failed: Unknown error");
-        }
+        const errorMessage =
+          error instanceof Error ? error.message : "Unknown error";
+        logger.logTaskExecution(task.description, "failed", errorMessage);
+        return `Task failed: ${errorMessage}`;
       }
-    }
+    });
 
-    return results;
+    return Promise.all(taskPromises);
   }
 }
