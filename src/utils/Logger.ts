@@ -32,12 +32,12 @@ export class Logger {
   /**
    * Log a task execution
    * @param taskDescription Description of the task
-   * @param status Status of the execution (started/completed/failed)
+   * @param status Status of the execution (started/completed/failed/retrying)
    * @param result Optional result or error message
    */
   public logTaskExecution(
     taskDescription: string,
-    status: "started" | "completed" | "failed",
+    status: "started" | "completed" | "failed" | "retrying",
     result?: string
   ): void {
     const timestamp = new Date().toISOString();
