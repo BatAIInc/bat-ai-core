@@ -18,6 +18,8 @@ Bat AI Core is a task execution system based on AI agents, designed to automate 
 
 ## 🔧 Installation
 
+Install the public package from npm:
+
 ```bash
 npm install @bat-ai/core
 # or
@@ -113,4 +115,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Support
 
 For support, please open an issue on GitHub or contact us at: support@example.com
-# bat-ai-core
