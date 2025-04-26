@@ -1,6 +1,65 @@
 # Bat AI Core
 
-Bat AI Core is a task execution system based on AI agents, designed to automate and manage complex workflows. The system uses a combination of tools and specialized agents to execute tasks intelligently and efficiently.
+[![npm version](https://badge.fury.io/js/%40bat-ai%2Fcore.svg)](https://badge.fury.io/js/%40bat-ai%2Fcore)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Documentation](https://img.shields.io/badge/Documentation-Online-blue)](https://bataiinc.github.io/bat-ai-core/#/)
+
+Bat AI Core is a sophisticated framework for building and managing AI agent teams. It provides a robust architecture for creating, coordinating, and deploying AI agents that can work together to accomplish complex tasks.
+
+## Features
+
+- 🤖 **Multi-Agent Collaboration**: Teams of specialized agents working together
+- 📋 **Advanced Task Management**: Priority-based scheduling, timeout control, and automatic retries
+- 🧠 **Flexible Memory System**: Short-term and long-term memory with persistence
+- 🛠️ **Extensible Tool System**: Built-in tools and custom tool creation
+- 🔒 **Secure Execution**: Sandboxed environment and access control
+- 📊 **Monitoring & Logging**: Comprehensive system metrics and logging
+
+## Installation
+
+```bash
+npm install @bat-ai/core
+```
+
+## Quick Start
+
+```typescript
+import { Agent, Bat } from "@bat-ai/core";
+import { ChatOpenAI } from "@langchain/openai";
+
+// Create an agent
+const agent = new Agent({
+  role: "developer",
+  goal: "Write and maintain code",
+  backstory: "A skilled developer agent",
+  model: new ChatOpenAI({ temperature: 0 }),
+  capabilities: ["code_execution"],
+});
+
+// Create a Bat instance
+const bat = new Bat([agent]);
+
+// Add a task
+bat.addTask({
+  description: "Write a function to sort an array",
+  agentRole: "developer",
+});
+
+// Execute tasks
+const results = await bat.kickoff();
+```
+
+## Documentation
+
+For detailed documentation, visit [https://bataiinc.github.io/bat-ai-core/#/](https://bataiinc.github.io/bat-ai-core/#/)
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Keywords
+
+ai, agents, automation, collaboration, task-management, memory-system, tools, typescript, nodejs, npm, openai, langchain
 
 ## 🚀 Features
 
