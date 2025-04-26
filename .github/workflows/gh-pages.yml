@@ -32,8 +32,12 @@ jobs:
 
       - name: Build docs
         run: |
+          # Create _media directory if it doesn't exist
           mkdir -p docs/_media
-          cp -r docs/_media/* docs/_media/
+          # Only copy files if they exist
+          if [ -d "docs/_media" ] && [ "$(ls -A docs/_media 2>/dev/null)" ]; then
+            cp -r docs/_media/* docs/_media/
+          fi
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
