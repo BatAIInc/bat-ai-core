@@ -2,6 +2,7 @@ import { BatTool } from "@bat-ai/tools";
 import { BaseMessage } from "@langchain/core/messages";
 import { BaseChatModel } from "@langchain/core/language_models/chat_models";
 import { BaseMemory } from "langchain/memory";
+import { Logger } from "../utils/Logger";
 
 /**
  * Interface for LLM models that can be used by agents
@@ -249,13 +250,27 @@ export class Agent {
     taskDescription: string,
     availableAgents: Agent[] = []
   ): Promise<string> {
+    const logger = Logger.getInstance();
+    logger.logAgentAction(
+      this.role,
+      `Starting execution of task: ${taskDescription}`
+    );
+
     try {
       // First try to use a tool
       const toolSelection = await this.selectTool(taskDescription);
       if (toolSelection) {
+        logger.logAgentAction(
+          this.role,
+          `Using tool: ${toolSelection.tool.schema.name}`
+        );
         const result = await this.useTool(
           toolSelection.tool.schema.name,
           toolSelection.input
+        );
+        logger.logAgentAction(
+          this.role,
+          `Tool execution completed successfully`
         );
         return JSON.stringify(result);
       }
@@ -264,6 +279,7 @@ export class Agent {
       const canHandle = await this.canHandleTask(taskDescription);
 
       if (!canHandle && availableAgents.length > 0) {
+        logger.logAgentAction(this.role, `Checking for task delegation`);
         const delegation = await this.shouldDelegateTask(
           taskDescription,
           availableAgents
@@ -275,6 +291,10 @@ export class Agent {
           );
 
           if (targetAgent) {
+            logger.logAgentAction(
+              this.role,
+              `Delegating task to agent: ${targetAgent.role}`
+            );
             return `Task delegated to ${
               targetAgent.role
             }:\n${await targetAgent.execute(taskDescription)}`;
@@ -283,6 +303,7 @@ export class Agent {
       }
 
       // If no tool or delegation, use the default execution
+      logger.logAgentAction(this.role, `Executing task using default method`);
       const prompt = this.buildPrompt(taskDescription);
 
       let previousContext: BaseMessage[] = [];
@@ -306,12 +327,16 @@ export class Agent {
         );
       }
 
+      logger.logAgentAction(this.role, `Task execution completed successfully`);
       return result;
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        throw new Error(`Agent execution failed: ${error.message}`);
-      }
-      throw new Error("Agent execution failed with unknown error");
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
+      logger.logAgentAction(
+        this.role,
+        `Task execution failed: ${errorMessage}`
+      );
+      throw new Error(`Agent execution failed: ${errorMessage}`);
     }
   }
 

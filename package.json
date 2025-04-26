@@ -1,13 +1,13 @@
 {
   "name": "@bat-ai/core",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "AI-powered task execution system",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
-    "dev": "ts-node src/index.ts",
+    "dev": "ts-node src/example.ts",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
