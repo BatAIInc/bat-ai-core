@@ -4,24 +4,37 @@ This document describes the architecture of Bat AI Core, including its component
 
 ## System Overview
 
-```mermaid
-graph TD
-    A[User Application] --> B[Bat]
-    B --> C[Task Manager]
-    B --> D[Agent Manager]
-    C --> E[Task Queue]
-    C --> F[Task Scheduler]
-    D --> G[Agent Pool]
-    G --> H[Agent 1]
-    G --> I[Agent 2]
-    G --> J[Agent 3]
-    H --> K[Memory]
-    H --> L[Tools]
-    I --> M[Memory]
-    I --> N[Tools]
-    J --> O[Memory]
-    J --> P[Tools]
-```
+The Bat AI Core system follows a hierarchical architecture:
+
+1. **User Application Layer**
+
+   - Provides the interface for users to interact with the system
+   - Handles user requests and displays results
+
+2. **Bat Orchestrator**
+
+   - Central component that manages the entire system
+   - Coordinates between different components
+   - Handles task distribution and agent management
+
+3. **Task Management Layer**
+
+   - Task Manager: Handles task creation and assignment
+   - Task Queue: Stores pending tasks
+   - Task Scheduler: Manages task execution timing
+
+4. **Agent Management Layer**
+
+   - Agent Manager: Manages agent lifecycle
+   - Agent Pool: Maintains available agents
+   - Agent Assignment: Matches tasks to appropriate agents
+
+5. **Agent Layer**
+   - Individual agents with specific roles
+   - Each agent has access to:
+     - Memory system
+     - Tool set
+     - Language model
 
 ## Core Components
 
@@ -115,42 +128,23 @@ class Task {
 
 ### Task Execution Flow
 
-```mermaid
-sequenceDiagram
-    participant U as User
-    participant B as Bat
-    participant TM as Task Manager
-    participant AM as Agent Manager
-    participant A as Agent
-    participant T as Tools
+The task execution flow follows these steps:
 
-    U->>B: addTask(task)
-    B->>TM: queueTask(task)
-    TM->>AM: assignAgent(task)
-    AM->>A: execute(task)
-    A->>T: useTool(tool)
-    T-->>A: toolResult
-    A-->>AM: taskResult
-    AM-->>TM: taskComplete
-    TM-->>B: taskDone
-    B-->>U: result
-```
+1. User submits a task to the Bat orchestrator
+2. Bat forwards the task to the Task Manager
+3. Task Manager queues the task
+4. Agent Manager assigns the task to an appropriate agent
+5. Agent executes the task using its tools and memory
+6. Results are returned through the chain back to the user
 
 ### Memory Management
 
-```mermaid
-sequenceDiagram
-    participant A as Agent
-    participant M as Memory
-    participant S as Storage
+The memory management system operates as follows:
 
-    A->>M: store(memory)
-    M->>S: persist(memory)
-    A->>M: retrieve(query)
-    M->>S: load(query)
-    S-->>M: memory
-    M-->>A: result
-```
+1. Agent stores new information in memory
+2. Memory system persists the data if configured
+3. Agent can retrieve information from memory
+4. Memory system loads data from storage when needed
 
 ## Data Flow
 

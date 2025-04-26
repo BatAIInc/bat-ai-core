@@ -34,19 +34,12 @@ Bat AI Core is a sophisticated framework for building and managing AI agent team
 
 ## Architecture
 
-```mermaid
-graph TD
-    A[User] --> B[Bat]
-    B --> C[Agent 1]
-    B --> D[Agent 2]
-    B --> E[Agent 3]
-    C --> F[Memory]
-    C --> G[Tools]
-    D --> H[Memory]
-    D --> I[Tools]
-    E --> J[Memory]
-    E --> K[Tools]
-```
+The Bat AI Core architecture consists of a central Bat orchestrator that manages multiple agents. Each agent has its own memory and tools, and can communicate with other agents. The system follows a hierarchical structure where:
+
+- Users interact with the Bat orchestrator
+- Bat manages multiple agents
+- Each agent has access to memory and tools
+- Agents can collaborate and share knowledge
 
 ## Key Features
 
